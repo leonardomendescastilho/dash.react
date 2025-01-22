@@ -1,7 +1,9 @@
+import { Button } from './components/ui/button';
+
 function App() {
 	return (
-		<div>
-			<h1>App</h1>
+		<div className="flex justify-center items-center h-screen">
+			<Button size={'sm'}>Clique aqui</Button>
 		</div>
 	);
 }
