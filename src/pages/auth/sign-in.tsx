@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import * as zod from 'zod'
 
@@ -19,7 +20,7 @@ function SignIn() {
   const { register, handleSubmit, formState } = useForm<SignInForm>({
     resolver: zodResolver(formSchema),
   })
-  const { isSubmitting, isSubmitted } = formState
+  const { isSubmitting } = formState
 
   async function handleSignIn(data: SignInForm) {
     try {
@@ -55,14 +56,18 @@ function SignIn() {
               <Label htmlFor="email">Seu e-mail</Label>
               <Input id="email" type="email" {...register('email')} />
             </div>
-
-            <Button disabled={isSubmitting} className="w-full" type="submit">
-              {isSubmitting ? (
-                <LoaderCircle className="ml-2 animate-spin" />
-              ) : (
-                'Acessar Painel'
-              )}
-            </Button>
+            <div className="flex flex-col gap-2">
+              <Button disabled={isSubmitting} className="w-full" type="submit">
+                {isSubmitting ? (
+                  <LoaderCircle className="ml-2 animate-spin" />
+                ) : (
+                  'Acessar Painel'
+                )}
+              </Button>
+              <Button variant={'ghost'} asChild>
+                <Link to={'/sign-up'}>Cadastrar novo parceiro</Link>
+              </Button>
+            </div>
           </form>
         </div>
       </div>
