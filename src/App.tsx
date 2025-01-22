@@ -6,7 +6,7 @@ import router from './routes'
 function App() {
   return (
     <HelmetProvider>
-      <Toaster richColors />
+      <Toaster richColors position="bottom-right" />
       <Helmet titleTemplate="%d | pizza.shop" />
       <RouterProvider router={router}></RouterProvider>
     </HelmetProvider>
