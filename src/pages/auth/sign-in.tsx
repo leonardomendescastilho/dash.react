@@ -1,10 +1,41 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { LoaderCircle } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import * as zod from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+const formSchema = zod.object({
+  email: zod.string().email(),
+})
+
+type SignInForm = zod.infer<typeof formSchema>
+
 function SignIn() {
+  const { register, handleSubmit, formState } = useForm<SignInForm>({
+    resolver: zodResolver(formSchema),
+  })
+  const { isSubmitting, isSubmitted } = formState
+
+  async function handleSignIn(data: SignInForm) {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+
+      toast.success('Link de autenticação enviado para o seu e-mail.', {
+        action: {
+          label: 'Ir para o e-mail',
+          onClick: () => window.open('https://mail.google.com/'),
+        },
+      })
+    } catch {
+      toast.error('Credenciais inválidas.')
+    }
+  }
+
   return (
     <>
       <Helmet title="login" />
@@ -19,17 +50,18 @@ function SignIn() {
             </p>
           </div>
 
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit(handleSignIn)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" />
+              <Input id="email" type="email" {...register('email')} />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Senha</Label>
-              <Input id="email" type="email" />
-            </div>
-            <Button className="w-full" type="submit">
-              Acessar Painel
+
+            <Button disabled={isSubmitting} className="w-full" type="submit">
+              {isSubmitting ? (
+                <LoaderCircle className="ml-2 animate-spin" />
+              ) : (
+                'Acessar Painel'
+              )}
             </Button>
           </form>
         </div>
