@@ -1,9 +1,15 @@
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { RouterProvider } from 'react-router-dom'
 
 import router from './routes'
 
 function App() {
-  return <RouterProvider router={router}></RouterProvider>
+  return (
+    <HelmetProvider>
+      <Helmet titleTemplate="%d | pizza.shop" />
+      <RouterProvider router={router}></RouterProvider>
+    </HelmetProvider>
+  )
 }
 
 export default App
