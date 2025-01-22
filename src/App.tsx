@@ -1,11 +1,9 @@
-import { Button } from './components/ui/button'
+import { RouterProvider } from 'react-router-dom'
+
+import router from './routes'
 
 function App() {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <Button size={'sm'}>Clique aqui</Button>
-    </div>
-  )
+  return <RouterProvider router={router}></RouterProvider>
 }
 
 export default App
