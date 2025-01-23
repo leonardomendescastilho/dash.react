@@ -47,7 +47,7 @@ function SignIn() {
               Acessar Painel
             </h1>
             <p className="text-sm text-muted-foreground">
-              Acompanhe suas vendas pelo painel do parcerio{' '}
+              Acompanhe suas vendas pelo painel do parcerio!{' '}
             </p>
           </div>
 
@@ -68,6 +68,7 @@ function SignIn() {
                 <Link to={'/sign-up'}>Cadastrar novo parceiro</Link>
               </Button>
             </div>
+            <div></div>
           </form>
         </div>
       </div>
