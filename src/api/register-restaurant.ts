@@ -7,11 +7,11 @@ export interface RegisterRestaurantParams {
   phone: string
 }
 
-export async function registerRestaurant({ 
-    email,
-    managerName,
-    phone,
-    restaurantName,
- }: RegisterRestaurantParams) {
+export async function registerRestaurant({
+  email,
+  managerName,
+  phone,
+  restaurantName,
+}: RegisterRestaurantParams) {
   await api.post('/restaurants', { email, managerName, phone, restaurantName })
 }
