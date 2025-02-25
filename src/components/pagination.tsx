@@ -14,8 +14,12 @@ export interface PaginationProps {
   onPageChange: (pageIndex: number) => void
 }
 
-function Pagination({ totalCount, pageIndex, perPage, onPageChange }: PaginationProps) {
-
+function Pagination({
+  totalCount,
+  pageIndex,
+  perPage,
+  onPageChange,
+}: PaginationProps) {
   // calcula o total de paginas, se não houver total de registro, retorna 1
   const pages = Math.ceil(totalCount / perPage) || 1
 
@@ -48,7 +52,7 @@ function Pagination({ totalCount, pageIndex, perPage, onPageChange }: Pagination
           <Button
             onClick={() => handlePageChange(pageIndex - 1)}
             disabled={pageIndex === 0}
-            value={'outline'} 
+            value={'outline'}
             className="h-8 w-8 p-0"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -65,7 +69,7 @@ function Pagination({ totalCount, pageIndex, perPage, onPageChange }: Pagination
             <span className="sr-only">Próxima página</span>
           </Button>
           {/* botão para ir para a última página, desabilitado se estiver na última página */}
-            <Button
+          <Button
             onClick={() => handlePageChange(pages - 1)}
             disabled={pageIndex === pages - 1}
             value={'outline'}

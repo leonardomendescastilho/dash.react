@@ -19,22 +19,33 @@ import OrderTableRows from './order-table-rows'
 function Orders() {
   const [searchParams, setSearchParams] = useSearchParams()
 
+  // pega os valores dos parâmetros da url (order-table-filters)
+  const orderId = searchParams.get('orderId')
+  const customerName = searchParams.get('customerName')
+  const status = searchParams.get('status')
+
   // verifica se o parametro page já existe no url, se existir, transforma em numero e subtrai 1, se não existir, retorna 0
-  //o pageIndex é o indice da pagina que o usuario esta, e é usado para fazer a query
+  // então, o pageIndex será 0 sempre que iniciar o componente (para o backend será 0, para o usuário será 1)
   const pageIndex = z.coerce
     .number()
     .transform((page) => page - 1)
     .parse(searchParams.get('page') ?? '1')
 
-  // então, o pageIndex será 0 sempre que iniciar o componente (para o backend será 0, para o usuário será 1)
+  // faz a query para pegar os dados da paginação
   const { data: result } = useQuery({
-    // importante ter o filtro para que seja possivel fazer a query novamente com o novo pageIndex e assim mudar de página.
-    queryKey: ['orders', pageIndex],
-    queryFn: () => getOrders({ pageIndex }),
+    // importante ter o filtro para que seja possivel fazer a query novamente com o novo pageIndex e filtros e assim mudar de página.
+    queryKey: ['orders', pageIndex, orderId, customerName, status],
+    queryFn: () =>
+      getOrders({
+        pageIndex,
+        orderId,
+        customerName,
+        status: status === 'all' ? null : status,
+      }),
   })
 
   // função para mudar de paginação utilizando o setSearchParams e o url.set para adicionar o novo parametro page convertendo para string, sempre.
-  const  handlePageChange = (pageIndex: number) => {
+  const handlePageChange = (pageIndex: number) => {
     // url pode ser chamado de prevPage, State, etc.
     setSearchParams((url) => {
       url.set('page', (pageIndex + 1).toString())
