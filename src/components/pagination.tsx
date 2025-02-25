@@ -15,8 +15,11 @@ export interface PaginationProps {
 }
 
 function Pagination({ totalCount, pageIndex, perPage, onPageChange }: PaginationProps) {
+
+  // calcula o total de paginas, se não houver total de registro, retorna 1
   const pages = Math.ceil(totalCount / perPage) || 1
 
+  // função para mudar de paginação, recebe o pageIndex e chama a função onPageChange passando o pageIndex
   const handlePageChange = (pageIndex: number) => {
     onPageChange(pageIndex)
   }
@@ -31,6 +34,7 @@ function Pagination({ totalCount, pageIndex, perPage, onPageChange }: Pagination
           Página {pageIndex + 1} de {pages}
         </div>
         <div className="flex items-center gap-2">
+          {/* botão para voltar para a primeira página, desabilitado se estiver na primeira página */}
           <Button
             onClick={() => handlePageChange(0)}
             disabled={pageIndex === 0}
@@ -40,6 +44,7 @@ function Pagination({ totalCount, pageIndex, perPage, onPageChange }: Pagination
             <ChevronsLeft className="h-4 w-4" />
             <span className="sr-only">Primeira página</span>
           </Button>
+          {/* botão para voltar para a página anterior, desabilitado se estiver na primeira página */}
           <Button
             onClick={() => handlePageChange(pageIndex - 1)}
             disabled={pageIndex === 0}
@@ -49,6 +54,7 @@ function Pagination({ totalCount, pageIndex, perPage, onPageChange }: Pagination
             <ChevronLeft className="h-4 w-4" />
             <span className="sr-only">Pagina anterior</span>
           </Button>
+          {/* botão para ir para a próxima página, desabilitado se estiver na última página */}
           <Button
             onClick={() => handlePageChange(pageIndex + 1)}
             disabled={pageIndex === pages - 1}
@@ -58,7 +64,8 @@ function Pagination({ totalCount, pageIndex, perPage, onPageChange }: Pagination
             <ChevronRight className="h-4 w-4" />
             <span className="sr-only">Próxima página</span>
           </Button>
-          <Button
+          {/* botão para ir para a última página, desabilitado se estiver na última página */}
+            <Button
             onClick={() => handlePageChange(pages - 1)}
             disabled={pageIndex === pages - 1}
             value={'outline'}
