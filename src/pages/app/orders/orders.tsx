@@ -28,12 +28,14 @@ function Orders() {
 
   // então, o pageIndex será 0 sempre que iniciar o componente (para o backend será 0, para o usuário será 1)
   const { data: result } = useQuery({
+    // importante ter o filtro para que seja possivel fazer a query novamente com o novo pageIndex e assim mudar de página.
     queryKey: ['orders', pageIndex],
     queryFn: () => getOrders({ pageIndex }),
   })
 
   // função para mudar de paginação utilizando o setSearchParams e o url.set para adicionar o novo parametro page convertendo para string, sempre.
   const  handlePageChange = (pageIndex: number) => {
+    // url pode ser chamado de prevPage, State, etc.
     setSearchParams((url) => {
       url.set('page', (pageIndex + 1).toString())
       return url
