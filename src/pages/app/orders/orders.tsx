@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
+import { useSearchParams } from 'react-router-dom'
+import { z } from 'zod'
 
 import { getOrders } from '@/api/get-orders'
 import Pagination from '@/components/pagination'
@@ -15,11 +17,25 @@ import OrderTableFilters from './order-table-filters'
 import OrderTableRows from './order-table-rows'
 
 function Orders() {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const pageIndex = z.coerce
+    .number()
+    .transform((page) => page - 1)
+    .parse(searchParams.get('page') ?? '1')
+
+  //necessário usar page index para fazer a query, para que seja possível mostrar novos pedidos quando o usuário clicar na paginação
   const { data: result } = useQuery({
-    queryKey: ['orders'],
-    queryFn: getOrders,
+    queryKey: ['orders', pageIndex],
+    queryFn: () => getOrders({ pageIndex }),
   })
 
+  const  handlePageChange = (pageIndex: number) => {
+    setSearchParams((url) => {
+      url.set('page', (pageIndex + 1).toString())
+      return url
+    })
+  }
   return (
     <>
       <Helmet title="Pedidos" />
@@ -52,7 +68,14 @@ function Orders() {
             </Table>
           </div>
 
-          <Pagination pageIndex={0} totalCount={10} perPage={8} />
+          {result && (
+            <Pagination
+              pageIndex={result.meta.pageIndex}
+              totalCount={result.meta.totalCount}
+              perPage={result.meta.perPage}
+              onPageChange={handlePageChange}
+            />
+          )}
         </div>
       </div>
     </>
