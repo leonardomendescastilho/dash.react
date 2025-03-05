@@ -24,7 +24,7 @@ function Orders() {
   const customerName = searchParams.get('customerName')
   const status = searchParams.get('status')
 
-  // verifica se o parametro page já existe no url, se existir, transforma em numero e subtrai 1, se não existir, retorna 0
+  // verifica se o parametro page já existe no url, se existir, transforma em numero e subtrai 1, para ficar com o index de array.
   // então, o pageIndex será 0 sempre que iniciar o componente (para o backend será 0, para o usuário será 1)
   const pageIndex = z.coerce
     .number()

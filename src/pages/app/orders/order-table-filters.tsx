@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { set } from 'date-fns'
 import { Search, X } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
@@ -26,12 +25,12 @@ type OrderFilterSchema = z.infer<typeof orderFiltersSchema>
 function OrderTableFilters() {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  // pega os valores dos parâmetros da url
+  // pega os valores dos parâmetros da url. Será que existe? Se sim, pega o valor, se não, seta como vazio
   const orderId = searchParams.get('orderId')
   const customerName = searchParams.get('customerName')
   const status = searchParams.get('status')
 
-  const { register, handleSubmit, control } = useForm<OrderFilterSchema>({
+  const { register, handleSubmit, control, reset } = useForm<OrderFilterSchema>({
     resolver: zodResolver(orderFiltersSchema),
     // pega os valores dos parâmetros da url e seta como valor padrão, se existir, caso não exista, seta como vazio
     defaultValues: {
@@ -61,7 +60,20 @@ function OrderTableFilters() {
   }
 
   const handleClearFilters = () => {
-    setSearchParams({})
+    setSearchParams(state =>{
+      state.delete('orderId')
+      state.delete('customerName')
+      state.delete('status')
+      state.set('page', '1')
+
+      return state
+    })
+
+    reset({
+      orderId: '',
+      customerName: '',
+      status: 'all',
+    })
   }
 
   return (

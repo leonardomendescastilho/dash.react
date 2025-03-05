@@ -8,6 +8,7 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { TableCell, TableRow } from '@/components/ui/table'
 
 import OrderDetails from './order-details'
+import { useState } from 'react'
 
 interface OrderTableRowsProps {
   order: {
@@ -20,18 +21,20 @@ interface OrderTableRowsProps {
 }
 
 function OrderTableRows({ order }: OrderTableRowsProps) {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+
   return (
     <TableRow>
       <TableCell>
-        <Dialog>
-          <DialogTrigger asChild>
+        <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+          <DialogTrigger  asChild>
             <Button variant={'outline'} size={'xm'}>
               <Search className="h3 w-3" />
               <span className="sr-only">Detalhes do pedido</span>
             </Button>
           </DialogTrigger>
 
-          <OrderDetails />
+          <OrderDetails open={isDetailsOpen} orderId={order.orderId} />
         </Dialog>
       </TableCell>
       <TableCell className="font-mono text-xs font-medium">
@@ -48,7 +51,7 @@ function OrderTableRows({ order }: OrderTableRowsProps) {
       </TableCell>
       <TableCell className="font-medium">{order.customerName}</TableCell>
       <TableCell className="font-medium">
-        {order.total.toLocaleString('pt-BR', {
+        {(order.total / 100).toLocaleString('pt-BR', {
           style: 'currency',
           currency: 'BRL',
         })}
