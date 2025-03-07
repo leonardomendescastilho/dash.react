@@ -30,15 +30,17 @@ function OrderTableFilters() {
   const customerName = searchParams.get('customerName')
   const status = searchParams.get('status')
 
-  const { register, handleSubmit, control, reset } = useForm<OrderFilterSchema>({
-    resolver: zodResolver(orderFiltersSchema),
-    // pega os valores dos parâmetros da url e seta como valor padrão, se existir, caso não exista, seta como vazio
-    defaultValues: {
-      orderId: orderId ?? '',
-      customerName: customerName ?? '',
-      status: status ?? 'all',
+  const { register, handleSubmit, control, reset } = useForm<OrderFilterSchema>(
+    {
+      resolver: zodResolver(orderFiltersSchema),
+      // pega os valores dos parâmetros da url e seta como valor padrão, se existir, caso não exista, seta como vazio
+      defaultValues: {
+        orderId: orderId ?? '',
+        customerName: customerName ?? '',
+        status: status ?? 'all',
+      },
     },
-  })
+  )
 
   const handleFilter = ({
     orderId,
@@ -60,7 +62,7 @@ function OrderTableFilters() {
   }
 
   const handleClearFilters = () => {
-    setSearchParams(state =>{
+    setSearchParams((state) => {
       state.delete('orderId')
       state.delete('customerName')
       state.delete('status')
