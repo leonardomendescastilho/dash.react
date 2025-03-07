@@ -1,4 +1,3 @@
-import { Item } from '@radix-ui/react-dropdown-menu'
 import { useQuery } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
