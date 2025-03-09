@@ -4,6 +4,8 @@ import { MessageSquareX } from 'lucide-react'
 import { getMonthCancelOrdersAmount } from '@/api/get-month-cancel-orders-amount'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
+import { MetricCardSkeleton } from './metric-card-skeleton'
+
 function MonthCancelOrdersAmount() {
   const { data: monthCancelOrdersAmount } = useQuery({
     queryFn: getMonthCancelOrdersAmount,
@@ -20,7 +22,7 @@ function MonthCancelOrdersAmount() {
           <MessageSquareX className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent className="space-y-1">
-          {monthCancelOrdersAmount && (
+          {monthCancelOrdersAmount ? (
             <>
               <span className="font-bol text-2xl tracking-tight">
                 {monthCancelOrdersAmount.amount.toLocaleString('pt-BR')}
@@ -43,6 +45,8 @@ function MonthCancelOrdersAmount() {
                 )}
               </p>
             </>
+          ) : (
+            <MetricCardSkeleton />
           )}
         </CardContent>
       </Card>

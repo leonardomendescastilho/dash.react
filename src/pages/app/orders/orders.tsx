@@ -15,6 +15,7 @@ import {
 
 import OrderTableFilters from './order-table-filters'
 import OrderTableRows from './order-table-rows'
+import { OrderTableSkeleton } from './order-table-skeleton'
 
 function Orders() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -32,7 +33,7 @@ function Orders() {
     .parse(searchParams.get('page') ?? '1')
 
   // faz a query para pegar os dados da paginação
-  const { data: result } = useQuery({
+  const { data: result, isLoading: isLoadingOrders } = useQuery({
     // importante ter o filtro para que seja possivel fazer a query novamente com o novo pageIndex e filtros e assim mudar de página.
     queryKey: ['orders', pageIndex, orderId, customerName, status],
     queryFn: () =>
@@ -76,6 +77,8 @@ function Orders() {
                 </TableRow>
               </TableHeader>
               <TableBody>
+                {isLoadingOrders && <OrderTableSkeleton />}
+
                 {result &&
                   result.orders.map((order) => {
                     return <OrderTableRows key={order.orderId} order={order} />
