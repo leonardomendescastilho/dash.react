@@ -1,4 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+import { subDays } from 'date-fns'
+import { useMemo, useState } from 'react'
+import { DateRange } from 'react-day-picker'
 import {
   CartesianGrid,
   Line,
@@ -10,6 +13,7 @@ import {
 import colors from 'tailwindcss/colors'
 
 import { getDailyRevenue } from '@/api/get-daily-revenue-in-period'
+import { DateRangePicker } from '@/components/date-range-picker'
 import {
   Card,
   CardContent,
@@ -17,23 +21,31 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-
-// const data = [
-//   { date: '2022-01-01', revenue: 650 },
-//   { date: '2022-01-05', revenue: 1200 },
-//   { date: '2022-01-10', revenue: 1800 },
-//   { date: '2022-01-15', revenue: 2500 },
-//   { date: '2022-01-20', revenue: 900 },
-//   { date: '2022-01-25', revenue: 1500 },
-//   { date: '2022-01-28', revenue: 2000 },
-//   { date: '2022-01-30', revenue: 1700 },
-// ]
+import { Label } from '@/components/ui/label'
 
 function RevenueChart() {
-  const { data: dailyRevenueInPeriod } = useQuery({
-    queryKey: ['metrics', 'daily-revenue-in-period'],
-    queryFn: getDailyRevenue,
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: subDays(new Date(), 7),
+    to: new Date(),
   })
+
+  const { data: dailyRevenueInPeriod } = useQuery({
+    queryKey: ['metrics', 'daily-revenue-in-period', dateRange],
+    queryFn: () =>
+      getDailyRevenue({
+        from: dateRange?.from,
+        to: dateRange?.to,
+      }),
+  })
+
+  const chartDate = useMemo(() => {
+    return dailyRevenueInPeriod?.map((chartItem) => {
+      return {
+        date: chartItem.date,
+        receipt: chartItem.receipt / 100,
+      }
+    })
+  }, [dailyRevenueInPeriod])
 
   return (
     <>
@@ -45,14 +57,19 @@ function RevenueChart() {
             </CardTitle>
             <CardDescription>Receita diário no período</CardDescription>
           </div>
+
+          <div className="flex items-center gap-3">
+            <Label>Período</Label>
+            <DateRangePicker date={dateRange} onDateChange={setDateRange} />
+          </div>
         </CardHeader>
 
         <CardContent>
           {/* // responsive para adaptar o grafico ao tamanho da tela */}
 
-          {dailyRevenueInPeriod && (
+          {chartDate && (
             <ResponsiveContainer width={'100%'} height={248}>
-              <LineChart data={dailyRevenueInPeriod} style={{ fontSize: 12 }}>
+              <LineChart data={chartDate} style={{ fontSize: 12 }}>
                 <XAxis
                   dataKey={'date'} // o que vai ficar no eixo x
                   axisLine={false} // detalhe do eixo x
