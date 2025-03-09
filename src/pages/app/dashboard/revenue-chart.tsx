@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import {
   CartesianGrid,
   Line,
@@ -8,6 +9,7 @@ import {
 } from 'recharts'
 import colors from 'tailwindcss/colors'
 
+import { getDailyRevenue } from '@/api/get-daily-revenue-in-period'
 import {
   Card,
   CardContent,
@@ -16,18 +18,23 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
-const data = [
-  { date: '2022-01-01', revenue: 650 },
-  { date: '2022-01-05', revenue: 1200 },
-  { date: '2022-01-10', revenue: 1800 },
-  { date: '2022-01-15', revenue: 2500 },
-  { date: '2022-01-20', revenue: 900 },
-  { date: '2022-01-25', revenue: 1500 },
-  { date: '2022-01-28', revenue: 2000 },
-  { date: '2022-01-30', revenue: 1700 },
-]
+// const data = [
+//   { date: '2022-01-01', revenue: 650 },
+//   { date: '2022-01-05', revenue: 1200 },
+//   { date: '2022-01-10', revenue: 1800 },
+//   { date: '2022-01-15', revenue: 2500 },
+//   { date: '2022-01-20', revenue: 900 },
+//   { date: '2022-01-25', revenue: 1500 },
+//   { date: '2022-01-28', revenue: 2000 },
+//   { date: '2022-01-30', revenue: 1700 },
+// ]
 
 function RevenueChart() {
+  const { data: dailyRevenueInPeriod } = useQuery({
+    queryKey: ['metrics', 'daily-revenue-in-period'],
+    queryFn: getDailyRevenue,
+  })
+
   return (
     <>
       <Card className="col-span-6">
@@ -42,46 +49,49 @@ function RevenueChart() {
 
         <CardContent>
           {/* // responsive para adaptar o grafico ao tamanho da tela */}
-          <ResponsiveContainer width={'100%'} height={248}>
-            <LineChart data={data} style={{ fontSize: 12 }}>
-              <XAxis
-                dataKey={'date'} // o que vai ficar no eixo x
-                axisLine={false} // detalhe do eixo x
-                tickLine={false} // detalhe do eixo x
-                dy={16} // espaço entre o grafico e o eixo x
-                tickFormatter={(value: string) =>
-                  value.split('-').reverse().join('/')
-                } // formatar o valor que aparece no eixo x
-              />
-              <YAxis
-                stroke="#888" // cor do eixo y
-                axisLine={false} // detalhe do eixo y
-                tickLine={false} // detalhe do eixo y
-                width={80} // largura do eixo y
-                tickFormatter={(value: number) =>
-                  value.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })
-                } // formatar o valor que aparece no eixo y
-              />
 
-              {/* configurações dos traços do grafico */}
-              <CartesianGrid
-                vertical={false}
-                strokeWidth="0.1"
-                className="stroke-muted-foreground"
-              />
+          {dailyRevenueInPeriod && (
+            <ResponsiveContainer width={'100%'} height={248}>
+              <LineChart data={dailyRevenueInPeriod} style={{ fontSize: 12 }}>
+                <XAxis
+                  dataKey={'date'} // o que vai ficar no eixo x
+                  axisLine={false} // detalhe do eixo x
+                  tickLine={false} // detalhe do eixo x
+                  dy={16} // espaço entre o grafico e o eixo x
+                  tickFormatter={(value: string) =>
+                    value.split('-').reverse().join('/')
+                  } // formatar o valor que aparece no eixo x
+                />
+                <YAxis
+                  stroke="#888" // cor do eixo y
+                  axisLine={false} // detalhe do eixo y
+                  tickLine={false} // detalhe do eixo y
+                  width={80} // largura do eixo y
+                  tickFormatter={(value: number) =>
+                    value.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })
+                  } // formatar o valor que aparece no eixo y
+                />
 
-              {/* // configuracoes do grafico, o data é o array de dados que vai ser mostrado */}
-              <Line
-                type={'linear'} // tipo de grafico
-                strokeWidth="2" // largura da linha
-                dataKey={'revenue'} // o que vai ficar no eixo y? mostra o valor da propriedade revenue
-                stroke={colors.green[700]} //
-              />
-            </LineChart>
-          </ResponsiveContainer>
+                {/* configurações dos traços do grafico */}
+                <CartesianGrid
+                  vertical={false}
+                  strokeWidth="0.1"
+                  className="stroke-muted-foreground"
+                />
+
+                {/* // configuracoes do grafico, o data é o array de dados que vai ser mostrado */}
+                <Line
+                  type={'linear'} // tipo de grafico
+                  strokeWidth="2" // largura da linha
+                  dataKey={'receipt'} // o que vai ficar no eixo y? mostra o valor da propriedade revenue
+                  stroke={colors.green[700]} //
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </CardContent>
       </Card>
     </>
