@@ -1,6 +1,8 @@
 {
+  // "include": ["src", "tests", "vite.config.ts", "**/*.ts", "**/*.tsx"],
   "files": [],
   "compilerOptions": {
+    "types": ["vitest/globals"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
