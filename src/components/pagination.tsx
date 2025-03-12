@@ -56,7 +56,7 @@ function Pagination({
             className="h-8 w-8 p-0"
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="sr-only">Pagina anterior</span>
+            <span className="sr-only">Página anterior</span>
           </Button>
           {/* botão para ir para a próxima página, desabilitado se estiver na última página */}
           <Button

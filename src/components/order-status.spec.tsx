@@ -11,9 +11,6 @@ describe('Order Status', () => {
 
     expect(statusText).toBeInTheDocument()
     expect(badgeElement).toHaveClass('bg-gray-500')
-
-    console.log('classe:', badgeElement.className)
-    console.log('texto: ', statusText.textContent)
   })
 
   it('Should display the correct text and color when order status is canceled', () => {
@@ -24,9 +21,6 @@ describe('Order Status', () => {
 
     expect(statusText).toBeInTheDocument()
     expect(badgeElement).toHaveClass('bg-red-500')
-
-    console.log('classe:', badgeElement.className)
-    console.log('texto: ', statusText.textContent)
   })
 
   it('Should display the correct text and color when order status is processing', () => {
@@ -37,9 +31,6 @@ describe('Order Status', () => {
 
     expect(statusText).toBeInTheDocument()
     expect(badgeElement).toHaveClass('bg-amber-500')
-
-    console.log('classe:', badgeElement.className)
-    console.log('texto: ', statusText.textContent)
   })
 
   it('Should display the correct text and color when order status is delivering ', () => {
@@ -50,9 +41,6 @@ describe('Order Status', () => {
 
     expect(statusText).toBeInTheDocument()
     expect(badgeElement).toHaveClass('bg-amber-500')
-
-    console.log('classe:', badgeElement.className)
-    console.log('texto: ', statusText.textContent)
   })
 
   it('Should display the correct text and color when order status is delivered ', () => {
@@ -63,8 +51,5 @@ describe('Order Status', () => {
 
     expect(statusText).toBeInTheDocument()
     expect(badgeElement).toHaveClass('bg-emerald-500')
-
-    console.log('classe:', badgeElement.className)
-    console.log('texto: ', statusText.textContent)
   })
 })
